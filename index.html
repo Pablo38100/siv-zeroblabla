@@ -312,8 +312,6 @@
         <div class="grid-2">
           <div><label>Prénom</label><input id="client_prenom" required /></div>
           <div><label>Nom</label><input id="client_nom" required /></div>
-          <div><label>Email</label><input id="client_email" type="email" required /></div>
-          <div><label>Téléphone</label><input id="client_telephone" required /></div>
           <div><label>Adresse</label><input id="client_adresse" required /></div>
           <div><label>Code postal</label><input id="client_code_postal" required /></div>
           <div><label>Ville</label><input id="client_ville" required /></div>
@@ -322,8 +320,8 @@
         <h3>Véhicule</h3>
         <div class="grid-2">
           <div><label>Immatriculation</label><input id="vehicule_immatriculation" placeholder="AA-123-AA" required /></div>
-          <div><label>Marque</label><input id="vehicule_marque" required /></div>
-          <div><label>Modèle</label><input id="vehicule_modele" required /></div>
+          <div><label>Date du CI</label><input id="vehicule_marque" type="date" required /></div>
+          <div><label>Numéro de formule</label><input id="vehicule_modele" placeholder="Exemple : 2019AB12345" required /></div>
           <div><label>Numéro VIN / série</label><input id="vehicule_vin" /></div>
         </div>
 
@@ -447,8 +445,8 @@
         statut: "recu",
         client_prenom: getValue("client_prenom"),
         client_nom: getValue("client_nom"),
-        client_email: getValue("client_email"),
-        client_telephone: getValue("client_telephone"),
+        client_email: null,
+        client_telephone: null,
         client_adresse: getValue("client_adresse"),
         client_code_postal: getValue("client_code_postal"),
         client_ville: getValue("client_ville"),
@@ -569,11 +567,10 @@
         </div>
         <div class="small-grid">
           <div><strong>Client :</strong> ${dossier.client_prenom || ""} ${dossier.client_nom || ""}</div>
-          <div><strong>Email :</strong> ${dossier.client_email || ""}</div>
-          <div><strong>Téléphone :</strong> ${dossier.client_telephone || ""}</div>
           <div><strong>Ville :</strong> ${dossier.client_code_postal || ""} ${dossier.client_ville || ""}</div>
           <div><strong>Immat :</strong> ${dossier.vehicule_immatriculation || ""}</div>
-          <div><strong>Véhicule :</strong> ${dossier.vehicule_marque || ""} ${dossier.vehicule_modele || ""}</div>
+          <div><strong>Date du CI :</strong> ${dossier.vehicule_marque || ""}</div>
+          <div><strong>Numéro de formule :</strong> ${dossier.vehicule_modele || ""}</div>
         </div>
         <p><strong>Note client :</strong> ${dossier.notes_client || "Aucune"}</p>
         <div>
