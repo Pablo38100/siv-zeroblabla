@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>siv-zeroblabla | Pablo garage</title>
+  <title>siv-zeroblabla | Zéro Blabla Garage</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --primary: #2563eb;
@@ -18,13 +19,18 @@
       --danger: #dc2626;
       --warning: #f59e0b;
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: linear-gradient(135deg, #e5eefc, #f8fafc);
       color: var(--text);
     }
+
     header {
       background: #0f172a;
       color: white;
@@ -33,6 +39,7 @@
       top: 0;
       z-index: 10;
     }
+
     .nav {
       max-width: 1100px;
       margin: auto;
@@ -41,6 +48,7 @@
       justify-content: space-between;
       gap: 12px;
     }
+
     .brand {
       display: flex;
       align-items: center;
@@ -48,6 +56,7 @@
       font-weight: 800;
       font-size: 20px;
     }
+
     .logo {
       width: 40px;
       height: 40px;
@@ -58,21 +67,16 @@
       justify-content: center;
       font-weight: 900;
     }
-    .site-logo {
-  height: 70px;
-  max-width: 330px;
-  object-fit: contain;
-  background: white;
-  border-radius: 14px;
-  padding: 6px 10px;
-}
 
-@media (max-width: 760px) {
-  .site-logo {
-    height: 58px;
-    max-width: 260px;
-  }
-}
+    .site-logo {
+      height: 70px;
+      max-width: 330px;
+      object-fit: contain;
+      background: white;
+      border-radius: 14px;
+      padding: 6px 10px;
+    }
+
     .nav a {
       color: white;
       text-decoration: none;
@@ -82,11 +86,13 @@
       background: rgba(255,255,255,0.08);
       font-size: 14px;
     }
+
     main {
       max-width: 1100px;
       margin: auto;
       padding: 28px 16px 70px;
     }
+
     .hero {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -94,6 +100,7 @@
       align-items: stretch;
       margin-bottom: 24px;
     }
+
     .panel {
       background: var(--card);
       border: 1px solid rgba(209,213,219,0.8);
@@ -101,14 +108,27 @@
       padding: 26px;
       box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10);
     }
+
     h1 {
       font-size: 42px;
       line-height: 1.05;
       margin: 0 0 14px;
     }
-    h2 { margin: 0 0 16px; font-size: 26px; }
-    h3 { margin: 22px 0 12px; }
-    p { color: #374151; line-height: 1.55; }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 26px;
+    }
+
+    h3 {
+      margin: 22px 0 12px;
+    }
+
+    p {
+      color: #374151;
+      line-height: 1.55;
+    }
+
     .badge {
       display: inline-block;
       color: #1e40af;
@@ -119,17 +139,20 @@
       margin-bottom: 16px;
       font-size: 14px;
     }
+
     .steps {
       display: grid;
       gap: 12px;
       margin-top: 18px;
     }
+
     .step {
       display: flex;
       gap: 10px;
       align-items: flex-start;
       color: #374151;
     }
+
     .num {
       min-width: 28px;
       height: 28px;
@@ -142,19 +165,28 @@
       font-weight: 800;
       font-size: 13px;
     }
-    form { display: grid; gap: 16px; }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
+
     label {
       display: block;
       font-weight: 700;
       margin-bottom: 7px;
       color: #1f2937;
     }
-    input, textarea, select {
+
+    input,
+    textarea,
+    select {
       width: 100%;
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -164,17 +196,26 @@
       color: var(--text);
       outline: none;
     }
-    textarea { min-height: 92px; resize: vertical; }
-    input:focus, textarea:focus, select:focus {
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
     }
+
     .file-card {
       border: 1px dashed #a5b4fc;
       background: #f8fafc;
       padding: 14px;
       border-radius: 14px;
     }
+
     .btn {
       border: none;
       border-radius: 12px;
@@ -186,10 +227,24 @@
       color: white;
       width: 100%;
     }
-    .btn:hover { background: var(--primary-dark); }
-    .btn.secondary { background: #111827; }
-    .btn.danger { background: var(--danger); }
-    .muted { color: var(--muted); font-size: 14px; }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn.secondary {
+      background: #111827;
+    }
+
+    .btn.danger {
+      background: var(--danger);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .notice {
       padding: 14px;
       border-radius: 14px;
@@ -197,15 +252,32 @@
       display: none;
       line-height: 1.45;
     }
-    .notice.success { background: #dcfce7; color: #166534; display: block; }
-    .notice.error { background: #fee2e2; color: #991b1b; display: block; }
-    .notice.info { background: #dbeafe; color: #1e3a8a; display: block; }
+
+    .notice.success {
+      background: #dcfce7;
+      color: #166534;
+      display: block;
+    }
+
+    .notice.error {
+      background: #fee2e2;
+      color: #991b1b;
+      display: block;
+    }
+
+    .notice.info {
+      background: #dbeafe;
+      color: #1e3a8a;
+      display: block;
+    }
+
     .tabs {
       display: flex;
       gap: 10px;
       margin: 18px 0;
       flex-wrap: wrap;
     }
+
     .tab {
       border: 1px solid var(--border);
       background: white;
@@ -215,15 +287,29 @@
       font-weight: 800;
       cursor: pointer;
     }
-    .tab.active { background: #0f172a; color: white; border-color: #0f172a; }
-    .hidden { display: none !important; }
-    .dossier-list { display: grid; gap: 14px; }
+
+    .tab.active {
+      background: #0f172a;
+      color: white;
+      border-color: #0f172a;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .dossier-list {
+      display: grid;
+      gap: 14px;
+    }
+
     .dossier-card {
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
       background: #ffffff;
     }
+
     .dossier-top {
       display: flex;
       justify-content: space-between;
@@ -231,7 +317,12 @@
       align-items: flex-start;
       margin-bottom: 10px;
     }
-    .ref { font-weight: 900; color: #1d4ed8; }
+
+    .ref {
+      font-weight: 900;
+      color: #1d4ed8;
+    }
+
     .status {
       padding: 6px 10px;
       border-radius: 999px;
@@ -240,6 +331,7 @@
       font-weight: 800;
       white-space: nowrap;
     }
+
     .small-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -247,14 +339,25 @@
       color: #374151;
       font-size: 14px;
     }
-    .doc-links { margin-top: 12px; display: grid; gap: 8px; }
-    .doc-links a { color: var(--primary); font-weight: 800; }
+
+    .doc-links {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .doc-links a {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
     footer {
       padding: 24px 16px;
       text-align: center;
       color: var(--muted);
       font-size: 13px;
     }
+
     .legal {
       margin-top: 16px;
       font-size: 12px;
@@ -263,22 +366,48 @@
       border-radius: 14px;
       padding: 12px;
     }
+
     @media (max-width: 760px) {
-      .hero { grid-template-columns: 1fr; }
-      h1 { font-size: 34px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .panel { padding: 20px; }
-      .small-grid { grid-template-columns: 1fr; }
-      .nav { align-items: flex-start; }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .small-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .site-logo {
+        height: 58px;
+        max-width: 260px;
+      }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="nav">
       <div class="brand">
-  <img src="logo-siv-zero-blabla.png" alt="SIV Zéro Blabla" class="site-logo">
-</div>
+        <img src="logo-siv-zero-blabla.png" alt="SIV Zéro Blabla" class="site-logo">
+      </div>
+
       <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
         <a href="#demande">Faire ma demande</a>
         <a href="#admin">Espace gérant</a>
@@ -289,25 +418,43 @@
   <main>
     <section class="hero">
       <div class="panel">
-        <span class="badge">Pablo garage</span>
+        <span class="badge">Zéro Blabla Garage</span>
+
         <h1>Carte grise véhicule d’occasion</h1>
+
         <p>
-          Déposez votre demande de changement de titulaire. Votre dossier est reçu par Pablo garage,
+          Déposez votre demande de changement de titulaire. Votre dossier est reçu par Zéro Blabla Garage,
           vérifié, puis traité avec l’accès SIV du garage.
         </p>
+
         <div class="steps">
-          <div class="step"><span class="num">1</span><span>Remplissez vos informations et celles du véhicule.</span></div>
-          <div class="step"><span class="num">2</span><span>Ajoutez les documents nécessaires.</span></div>
-          <div class="step"><span class="num">3</span><span>Recevez votre référence de dossier.</span></div>
+          <div class="step">
+            <span class="num">1</span>
+            <span>Remplissez vos informations et celles du véhicule.</span>
+          </div>
+
+          <div class="step">
+            <span class="num">2</span>
+            <span>Ajoutez les documents nécessaires.</span>
+          </div>
+
+          <div class="step">
+            <span class="num">3</span>
+            <span>Recevez votre référence de dossier.</span>
+          </div>
         </div>
+
         <div class="legal">
           Service privé de gestion de dossier. Cette page n’est pas le site officiel de l’ANTS ou de l’État.
           Les informations de contact, mentions légales, paiement et politique de confidentialité devront être ajoutés avant usage réel avec des clients.
         </div>
       </div>
+
       <div class="panel">
         <h2>Documents utiles</h2>
+
         <p class="muted">Préparez les fichiers au format photo ou PDF.</p>
+
         <ul>
           <li>Carte grise barrée</li>
           <li>Certificat de cession</li>
@@ -316,40 +463,102 @@
           <li>Contrôle technique si concerné</li>
           <li>Mandat / documents complémentaires si besoin</li>
         </ul>
+
         <p class="muted">Le prix dépendra du montant de la carte grise et du dossier.</p>
       </div>
     </section>
 
     <section id="demande" class="panel">
       <h2>Faire une demande</h2>
+
       <p class="muted">Changement de titulaire — carte grise véhicule occasion.</p>
 
       <form id="dossierForm">
         <h3>Vos informations</h3>
+
         <div class="grid-2">
-          <div><label>Prénom</label><input id="client_prenom" required /></div>
-          <div><label>Nom</label><input id="client_nom" required /></div>
-          <div><label>Adresse</label><input id="client_adresse" required /></div>
-          <div><label>Code postal</label><input id="client_code_postal" required /></div>
-          <div><label>Ville</label><input id="client_ville" required /></div>
+          <div>
+            <label>Prénom</label>
+            <input id="client_prenom" required />
+          </div>
+
+          <div>
+            <label>Nom</label>
+            <input id="client_nom" required />
+          </div>
+
+          <div>
+            <label>Adresse</label>
+            <input id="client_adresse" required />
+          </div>
+
+          <div>
+            <label>Code postal</label>
+            <input id="client_code_postal" required />
+          </div>
+
+          <div>
+            <label>Ville</label>
+            <input id="client_ville" required />
+          </div>
         </div>
 
         <h3>Véhicule</h3>
+
         <div class="grid-2">
-          <div><label>Immatriculation</label><input id="vehicule_immatriculation" placeholder="AA-123-AA" required /></div>
-          <div><label>Date du CI</label><input id="vehicule_marque" type="date" required /></div>
-          <div><label>Numéro de formule</label><input id="vehicule_modele" placeholder="Exemple : 2019AB12345" required /></div>
-          <div><label>Numéro VIN / série</label><input id="vehicule_vin" /></div>
+          <div>
+            <label>Immatriculation</label>
+            <input id="vehicule_immatriculation" placeholder="AA-123-AA" required />
+          </div>
+
+          <div>
+            <label>Date du CI</label>
+            <input id="vehicule_marque" type="date" required />
+          </div>
+
+          <div>
+            <label>Numéro de formule</label>
+            <input id="vehicule_modele" placeholder="Exemple : 2019AB12345" required />
+          </div>
+
+          <div>
+            <label>Numéro VIN / série</label>
+            <input id="vehicule_vin" />
+          </div>
         </div>
 
         <h3>Documents</h3>
+
         <div class="grid-2">
-          <div class="file-card"><label>Carte grise barrée</label><input id="doc_carte_grise" type="file" accept="image/*,.pdf" /></div>
-          <div class="file-card"><label>Certificat de cession</label><input id="doc_cession" type="file" accept="image/*,.pdf" /></div>
-          <div class="file-card"><label>Pièce d’identité</label><input id="doc_identite" type="file" accept="image/*,.pdf" /></div>
-          <div class="file-card"><label>Justificatif de domicile</label><input id="doc_domicile" type="file" accept="image/*,.pdf" /></div>
-          <div class="file-card"><label>Contrôle technique</label><input id="doc_controle" type="file" accept="image/*,.pdf" /></div>
-          <div class="file-card"><label>Autre document</label><input id="doc_autre" type="file" accept="image/*,.pdf" /></div>
+          <div class="file-card">
+            <label>Carte grise barrée</label>
+            <input id="doc_carte_grise" type="file" accept="image/*,.pdf" />
+          </div>
+
+          <div class="file-card">
+            <label>Certificat de cession</label>
+            <input id="doc_cession" type="file" accept="image/*,.pdf" />
+          </div>
+
+          <div class="file-card">
+            <label>Pièce d’identité</label>
+            <input id="doc_identite" type="file" accept="image/*,.pdf" />
+          </div>
+
+          <div class="file-card">
+            <label>Justificatif de domicile</label>
+            <input id="doc_domicile" type="file" accept="image/*,.pdf" />
+          </div>
+
+          <div class="file-card">
+            <label>Contrôle technique</label>
+            <input id="doc_controle" type="file" accept="image/*,.pdf" />
+          </div>
+
+          <div class="file-card">
+            <label>Autre document</label>
+            <input id="doc_autre" type="file" accept="image/*,.pdf" />
+          </div>
         </div>
 
         <div>
@@ -357,39 +566,63 @@
           <textarea id="notes_client" placeholder="Exemple : achat récent, urgence, document manquant..."></textarea>
         </div>
 
-        <button class="btn" type="submit" id="submitBtn">Envoyer ma demande</button>
+        <button class="btn" type="submit" id="submitBtn">
+          Envoyer ma demande
+        </button>
+
         <div id="formMessage" class="notice"></div>
       </form>
     </section>
 
     <section id="admin" class="panel" style="margin-top:24px;">
       <h2>Espace gérant</h2>
-      <p class="muted">Connexion réservée à Pablo garage.</p>
+
+      <p class="muted">Connexion réservée à Zéro Blabla Garage.</p>
 
       <div id="loginBox">
         <form id="loginForm">
           <div class="grid-2">
-            <div><label>Email gérant</label><input id="adminEmail" type="email" required /></div>
-            <div><label>Mot de passe</label><input id="adminPassword" type="password" required /></div>
+            <div>
+              <label>Email gérant</label>
+              <input id="adminEmail" type="email" required />
+            </div>
+
+            <div>
+              <label>Mot de passe</label>
+              <input id="adminPassword" type="password" required />
+            </div>
           </div>
-          <button class="btn secondary" type="submit">Se connecter</button>
+
+          <button class="btn secondary" type="submit">
+            Se connecter
+          </button>
+
           <div id="loginMessage" class="notice"></div>
         </form>
       </div>
 
       <div id="adminBox" class="hidden">
         <div class="tabs">
-          <button class="tab active" type="button" onclick="loadDossiers()">Actualiser les dossiers</button>
-          <button class="tab" type="button" onclick="signOut()">Déconnexion</button>
+          <button class="tab active" type="button" onclick="loadDossiers()">
+            Actualiser les dossiers
+          </button>
+
+          <button class="tab" type="button" onclick="signOut()">
+            Déconnexion
+          </button>
         </div>
-        <div id="adminMessage" class="notice info">Chargement...</div>
+
+        <div id="adminMessage" class="notice info">
+          Chargement...
+        </div>
+
         <div id="dossierList" class="dossier-list"></div>
       </div>
     </section>
   </main>
 
   <footer>
-    © 2026 Pablo garage — siv-zeroblabla
+    © 2026 Zéro Blabla Garage — siv-zeroblabla
   </footer>
 
   <script>
@@ -424,7 +657,11 @@
 
     async function uploadOneFile(dossierId, fileInputId, typeDocument) {
       const input = document.getElementById(fileInputId);
-      if (!input || !input.files || input.files.length === 0) return null;
+
+      if (!input || !input.files || input.files.length === 0) {
+        return null;
+      }
+
       const file = input.files[0];
       const path = dossierId + "/" + typeDocument + "/" + Date.now() + "-" + safeFileName(file.name);
 
@@ -432,7 +669,10 @@
         cacheControl: "3600",
         upsert: false
       });
-      if (upload.error) throw upload.error;
+
+      if (upload.error) {
+        throw upload.error;
+      }
 
       const docInsert = await client.from("documents_siv").insert({
         dossier_id: dossierId,
@@ -442,14 +682,20 @@
         mime_type: file.type || null,
         taille_octets: file.size || null
       });
-      if (docInsert.error) throw docInsert.error;
+
+      if (docInsert.error) {
+        throw docInsert.error;
+      }
+
       return path;
     }
 
     document.getElementById("dossierForm").addEventListener("submit", async (event) => {
       event.preventDefault();
+
       submitBtn.disabled = true;
       submitBtn.textContent = "Envoi en cours...";
+
       showMessage(formMessage, "info", "Création du dossier et envoi des documents...");
 
       const dossierId = crypto.randomUUID();
@@ -477,7 +723,10 @@
 
       try {
         const inserted = await client.from("dossiers_siv").insert(dossier);
-        if (inserted.error) throw inserted.error;
+
+        if (inserted.error) {
+          throw inserted.error;
+        }
 
         await uploadOneFile(dossierId, "doc_carte_grise", "carte_grise_barree");
         await uploadOneFile(dossierId, "doc_cession", "certificat_cession");
@@ -487,10 +736,20 @@
         await uploadOneFile(dossierId, "doc_autre", "autre_document");
 
         document.getElementById("dossierForm").reset();
-        showMessage(formMessage, "success", "Dossier envoyé avec succès ✅<br><strong>Référence : " + reference + "</strong><br>Conservez cette référence.");
+
+        showMessage(
+          formMessage,
+          "success",
+          "Dossier envoyé avec succès ✅<br><strong>Référence : " + reference + "</strong><br>Conservez cette référence."
+        );
       } catch (error) {
         console.error(error);
-        showMessage(formMessage, "error", "Erreur : " + (error.message || "impossible d’envoyer le dossier."));
+
+        showMessage(
+          formMessage,
+          "error",
+          "Erreur : " + (error.message || "impossible d’envoyer le dossier.")
+        );
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Envoyer ma demande";
@@ -499,24 +758,34 @@
 
     document.getElementById("loginForm").addEventListener("submit", async (event) => {
       event.preventDefault();
+
       const email = getValue("adminEmail");
       const password = getValue("adminPassword");
       const loginMessage = document.getElementById("loginMessage");
+
       showMessage(loginMessage, "info", "Connexion...");
 
-      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
       if (error) {
         showMessage(loginMessage, "error", "Connexion impossible : " + error.message);
         return;
       }
+
       document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("adminBox").classList.remove("hidden");
+
       showMessage(loginMessage, "success", "Connecté.");
+
       loadDossiers();
     });
 
     async function signOut() {
       await client.auth.signOut();
+
       document.getElementById("loginBox").classList.remove("hidden");
       document.getElementById("adminBox").classList.add("hidden");
       document.getElementById("dossierList").innerHTML = "";
@@ -525,7 +794,9 @@
     async function loadDossiers() {
       const adminMessage = document.getElementById("adminMessage");
       const list = document.getElementById("dossierList");
+
       showMessage(adminMessage, "info", "Chargement des dossiers...");
+
       list.innerHTML = "";
 
       const { data: dossiers, error } = await client
@@ -544,6 +815,7 @@
       }
 
       showMessage(adminMessage, "success", dossiers.length + " dossier(s) trouvé(s).");
+
       for (const dossier of dossiers) {
         const docs = await loadDocs(dossier.id);
         list.appendChild(renderDossier(dossier, docs));
@@ -556,13 +828,23 @@
         .select("*")
         .eq("dossier_id", dossierId)
         .order("created_at", { ascending: true });
-      if (error) return [];
+
+      if (error) {
+        return [];
+      }
+
       return data || [];
     }
 
     async function getSignedUrl(path) {
-      const { data, error } = await client.storage.from("documents-siv").createSignedUrl(path, 60 * 10);
-      if (error) throw error;
+      const { data, error } = await client.storage
+        .from("documents-siv")
+        .createSignedUrl(path, 60 * 10);
+
+      if (error) {
+        throw error;
+      }
+
       return data.signedUrl;
     }
 
@@ -571,7 +853,7 @@
       card.className = "dossier-card";
 
       const docsHtml = docs.length
-        ? docs.map((doc, index) => `<button class="tab" type="button" data-path="${doc.chemin_stockage}">Télécharger ${doc.type_document}</button>`).join("")
+        ? docs.map((doc) => `<button class="tab" type="button" data-path="${doc.chemin_stockage}">Télécharger ${doc.type_document}</button>`).join("")
         : `<span class="muted">Aucun document envoyé.</span>`;
 
       card.innerHTML = `
@@ -582,6 +864,7 @@
           </div>
           <span class="status">${dossier.statut}</span>
         </div>
+
         <div class="small-grid">
           <div><strong>Client :</strong> ${dossier.client_prenom || ""} ${dossier.client_nom || ""}</div>
           <div><strong>Ville :</strong> ${dossier.client_code_postal || ""} ${dossier.client_ville || ""}</div>
@@ -589,7 +872,9 @@
           <div><strong>Date du CI :</strong> ${dossier.vehicule_marque || ""}</div>
           <div><strong>Numéro de formule :</strong> ${dossier.vehicule_modele || ""}</div>
         </div>
+
         <p><strong>Note client :</strong> ${dossier.notes_client || "Aucune"}</p>
+
         <div>
           <label>Changer le statut</label>
           <select data-dossier-id="${dossier.id}" class="statusSelect">
@@ -600,7 +885,10 @@
             <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Terminé</option>
           </select>
         </div>
-        <div class="doc-links">${docsHtml}</div>
+
+        <div class="doc-links">
+          ${docsHtml}
+        </div>
       `;
 
       card.querySelectorAll("button[data-path]").forEach((btn) => {
@@ -618,9 +906,17 @@
         select.addEventListener("change", async () => {
           const dossierId = select.dataset.dossierId;
           const newStatus = select.value;
-          const { error } = await client.from("dossiers_siv").update({ statut: newStatus }).eq("id", dossierId);
-          if (error) alert("Erreur statut : " + error.message);
-          else alert("Statut mis à jour.");
+
+          const { error } = await client
+            .from("dossiers_siv")
+            .update({ statut: newStatus })
+            .eq("id", dossierId);
+
+          if (error) {
+            alert("Erreur statut : " + error.message);
+          } else {
+            alert("Statut mis à jour.");
+          }
         });
       });
 
