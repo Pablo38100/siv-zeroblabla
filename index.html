@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>siv-zeroblabla | Zéro Blabla Garage</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
-      --bg: #f3f6fb;
+      --navy: #0f172a;
       --card: #ffffff;
       --text: #111827;
       --muted: #6b7280;
       --border: #d1d5db;
-      --success: #16a34a;
       --danger: #dc2626;
-      --warning: #f59e0b;
     }
 
     * {
@@ -32,7 +32,7 @@
     }
 
     header {
-      background: #0f172a;
+      background: var(--navy);
       color: white;
       padding: 18px 16px;
       position: sticky;
@@ -52,20 +52,6 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 20px;
-    }
-
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: var(--primary);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
     }
 
     .site-logo {
@@ -77,13 +63,20 @@
       padding: 6px 10px;
     }
 
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
     .nav a {
       color: white;
       text-decoration: none;
       font-weight: 700;
       padding: 10px 12px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       font-size: 14px;
     }
 
@@ -103,7 +96,7 @@
 
     .panel {
       background: var(--card);
-      border: 1px solid rgba(209,213,219,0.8);
+      border: 1px solid rgba(209, 213, 219, 0.8);
       border-radius: 22px;
       padding: 26px;
       box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10);
@@ -236,10 +229,6 @@
       background: #111827;
     }
 
-    .btn.danger {
-      background: var(--danger);
-    }
-
     .muted {
       color: var(--muted);
       font-size: 14px;
@@ -346,11 +335,6 @@
       gap: 8px;
     }
 
-    .doc-links a {
-      color: var(--primary);
-      font-weight: 800;
-    }
-
     footer {
       padding: 24px 16px;
       text-align: center;
@@ -408,7 +392,7 @@
         <img src="logo-siv-zero-blabla.png" alt="SIV Zéro Blabla" class="site-logo">
       </div>
 
-      <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+      <div class="nav-links">
         <a href="#demande">Faire ma demande</a>
         <a href="#admin">Espace gérant</a>
       </div>
@@ -464,14 +448,18 @@
           <li>Mandat / documents complémentaires si besoin</li>
         </ul>
 
-        <p class="muted">Le prix dépendra du montant de la carte grise et du dossier.</p>
+        <p class="muted">
+          Le prix dépendra du montant de la carte grise et du dossier.
+        </p>
       </div>
     </section>
 
     <section id="demande" class="panel">
       <h2>Faire une demande</h2>
 
-      <p class="muted">Changement de titulaire — carte grise véhicule occasion.</p>
+      <p class="muted">
+        Changement de titulaire — carte grise véhicule occasion.
+      </p>
 
       <form id="dossierForm">
         <h3>Vos informations</h3>
@@ -577,7 +565,9 @@
     <section id="admin" class="panel" style="margin-top:24px;">
       <h2>Espace gérant</h2>
 
-      <p class="muted">Connexion réservée à Zéro Blabla Garage.</p>
+      <p class="muted">
+        Connexion réservée à Zéro Blabla Garage.
+      </p>
 
       <div id="loginBox">
         <form id="loginForm">
@@ -628,7 +618,11 @@
   <script>
     const SUPABASE_URL = "https://qfvdxhefxbitvlcdssnn.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_HILMx2YibxT1GMtHE2ySEg_w_6PNL3V";
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
     const formMessage = document.getElementById("formMessage");
     const submitBtn = document.getElementById("submitBtn");
@@ -663,12 +657,22 @@
       }
 
       const file = input.files[0];
-      const path = dossierId + "/" + typeDocument + "/" + Date.now() + "-" + safeFileName(file.name);
 
-      const upload = await client.storage.from("documents-siv").upload(path, file, {
-        cacheControl: "3600",
-        upsert: false
-      });
+      const path =
+        dossierId +
+        "/" +
+        typeDocument +
+        "/" +
+        Date.now() +
+        "-" +
+        safeFileName(file.name);
+
+      const upload = await client.storage
+        .from("documents-siv")
+        .upload(path, file, {
+          cacheControl: "3600",
+          upsert: false
+        });
 
       if (upload.error) {
         throw upload.error;
@@ -696,16 +700,21 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Envoi en cours...";
 
-      showMessage(formMessage, "info", "Création du dossier et envoi des documents...");
+      showMessage(
+        formMessage,
+        "info",
+        "Création du dossier et envoi des documents..."
+      );
 
       const dossierId = crypto.randomUUID();
       const reference = makeReference();
 
       const dossier = {
         id: dossierId,
-        reference,
+        reference: reference,
         service: "changement_titulaire",
         statut: "recu",
+
         client_prenom: getValue("client_prenom"),
         client_nom: getValue("client_nom"),
         client_email: null,
@@ -713,16 +722,20 @@
         client_adresse: getValue("client_adresse"),
         client_code_postal: getValue("client_code_postal"),
         client_ville: getValue("client_ville"),
+
         vehicule_immatriculation: getValue("vehicule_immatriculation"),
         vehicule_marque: getValue("vehicule_marque"),
         vehicule_modele: getValue("vehicule_modele"),
         vehicule_vin: getValue("vehicule_vin"),
+
         paiement_statut: "non_demande",
         notes_client: getValue("notes_client")
       };
 
       try {
-        const inserted = await client.from("dossiers_siv").insert(dossier);
+        const inserted = await client
+          .from("dossiers_siv")
+          .insert(dossier);
 
         if (inserted.error) {
           throw inserted.error;
@@ -740,7 +753,9 @@
         showMessage(
           formMessage,
           "success",
-          "Dossier envoyé avec succès ✅<br><strong>Référence : " + reference + "</strong><br>Conservez cette référence."
+          "Dossier envoyé avec succès ✅<br><strong>Référence : " +
+            reference +
+            "</strong><br>Conservez cette référence."
         );
       } catch (error) {
         console.error(error);
@@ -766,12 +781,16 @@
       showMessage(loginMessage, "info", "Connexion...");
 
       const { data, error } = await client.auth.signInWithPassword({
-        email,
-        password
+        email: email,
+        password: password
       });
 
       if (error) {
-        showMessage(loginMessage, "error", "Connexion impossible : " + error.message);
+        showMessage(
+          loginMessage,
+          "error",
+          "Connexion impossible : " + error.message
+        );
         return;
       }
 
@@ -805,7 +824,11 @@
         .order("created_at", { ascending: false });
 
       if (error) {
-        showMessage(adminMessage, "error", "Erreur chargement : " + error.message);
+        showMessage(
+          adminMessage,
+          "error",
+          "Erreur chargement : " + error.message
+        );
         return;
       }
 
@@ -814,7 +837,11 @@
         return;
       }
 
-      showMessage(adminMessage, "success", dossiers.length + " dossier(s) trouvé(s).");
+      showMessage(
+        adminMessage,
+        "success",
+        dossiers.length + " dossier(s) trouvé(s)."
+      );
 
       for (const dossier of dossiers) {
         const docs = await loadDocs(dossier.id);
@@ -853,14 +880,20 @@
       card.className = "dossier-card";
 
       const docsHtml = docs.length
-        ? docs.map((doc) => `<button class="tab" type="button" data-path="${doc.chemin_stockage}">Télécharger ${doc.type_document}</button>`).join("")
+        ? docs.map((doc) => `
+            <button class="tab" type="button" data-path="${doc.chemin_stockage}">
+              Télécharger ${doc.type_document}
+            </button>
+          `).join("")
         : `<span class="muted">Aucun document envoyé.</span>`;
 
       card.innerHTML = `
         <div class="dossier-top">
           <div>
             <div class="ref">${dossier.reference || dossier.id}</div>
-            <div class="muted">Créé le ${new Date(dossier.created_at).toLocaleString("fr-FR")}</div>
+            <div class="muted">
+              Créé le ${new Date(dossier.created_at).toLocaleString("fr-FR")}
+            </div>
           </div>
           <span class="status">${dossier.statut}</span>
         </div>
@@ -873,10 +906,13 @@
           <div><strong>Numéro de formule :</strong> ${dossier.vehicule_modele || ""}</div>
         </div>
 
-        <p><strong>Note client :</strong> ${dossier.notes_client || "Aucune"}</p>
+        <p>
+          <strong>Note client :</strong> ${dossier.notes_client || "Aucune"}
+        </p>
 
         <div>
           <label>Changer le statut</label>
+
           <select data-dossier-id="${dossier.id}" class="statusSelect">
             <option value="recu" ${dossier.statut === "recu" ? "selected" : ""}>Reçu</option>
             <option value="incomplet" ${dossier.statut === "incomplet" ? "selected" : ""}>Incomplet</option>
