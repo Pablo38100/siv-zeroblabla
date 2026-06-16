@@ -58,6 +58,21 @@
       justify-content: center;
       font-weight: 900;
     }
+    .site-logo {
+  height: 70px;
+  max-width: 330px;
+  object-fit: contain;
+  background: white;
+  border-radius: 14px;
+  padding: 6px 10px;
+}
+
+@media (max-width: 760px) {
+  .site-logo {
+    height: 58px;
+    max-width: 260px;
+  }
+}
     .nav a {
       color: white;
       text-decoration: none;
@@ -261,7 +276,9 @@
 <body>
   <header>
     <div class="nav">
-      <div class="brand"><span class="logo">S</span> siv-zeroblabla</div>
+      <div class="brand">
+  <img src="logo-siv-zero-blabla.png" alt="SIV Zéro Blabla" class="site-logo">
+</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
         <a href="#demande">Faire ma demande</a>
         <a href="#admin">Espace gérant</a>
