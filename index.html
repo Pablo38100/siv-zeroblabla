@@ -13,11 +13,14 @@
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --navy: #0f172a;
+      --navy-2: #111827;
       --card: #ffffff;
       --text: #111827;
       --muted: #6b7280;
       --border: #d1d5db;
       --danger: #dc2626;
+      --green: #16a34a;
+      --light-blue: #dbeafe;
     }
 
     * {
@@ -38,6 +41,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
     }
 
     .nav {
@@ -70,14 +74,20 @@
       justify-content: flex-end;
     }
 
-    .nav a {
+    .nav button {
       color: white;
+      border: none;
       text-decoration: none;
-      font-weight: 700;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.08);
+      font-weight: 800;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.10);
       font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav button:hover {
+      background: rgba(255, 255, 255, 0.18);
     }
 
     main {
@@ -86,12 +96,103 @@
       padding: 28px 16px 70px;
     }
 
-    .hero {
+    .hidden {
+      display: none !important;
+    }
+
+    .home-hero {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       gap: 22px;
       align-items: stretch;
-      margin-bottom: 24px;
+    }
+
+    .menu-hero {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .menu-hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.35);
+      right: -70px;
+      bottom: -90px;
+    }
+
+    .menu-hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 44px;
+      line-height: 1.05;
+      margin: 0 0 16px;
+      color: white;
+    }
+
+    .menu-hero p {
+      position: relative;
+      z-index: 1;
+      color: #dbeafe;
+      line-height: 1.6;
+      font-size: 17px;
+      margin: 0;
+    }
+
+    .menu-actions {
+      display: grid;
+      gap: 16px;
+    }
+
+    .menu-card {
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      background: white;
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.18);
+    }
+
+    .menu-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--primary);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .menu-card h2 {
+      font-size: 26px;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+
+    .menu-card p {
+      color: #4b5563;
+      line-height: 1.5;
+      margin: 0;
+      font-size: 15px;
     }
 
     .panel {
@@ -125,7 +226,7 @@
     .badge {
       display: inline-block;
       color: #1e40af;
-      background: #dbeafe;
+      background: var(--light-blue);
       padding: 8px 12px;
       border-radius: 999px;
       font-weight: 800;
@@ -133,30 +234,18 @@
       font-size: 14px;
     }
 
-    .steps {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .step {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      color: #374151;
-    }
-
-    .num {
-      min-width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      background: var(--primary);
-      color: white;
+    .back-btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      background: #0f172a;
+      color: white;
+      padding: 11px 16px;
       font-weight: 800;
-      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 18px;
     }
 
     form {
@@ -229,6 +318,10 @@
       background: #111827;
     }
 
+    .btn.green {
+      background: var(--green);
+    }
+
     .muted {
       color: var(--muted);
       font-size: 14px;
@@ -283,8 +376,9 @@
       border-color: #0f172a;
     }
 
-    .hidden {
-      display: none !important;
+    .client-dashboard {
+      display: grid;
+      gap: 16px;
     }
 
     .dossier-list {
@@ -342,21 +436,12 @@
       font-size: 13px;
     }
 
-    .legal {
-      margin-top: 16px;
-      font-size: 12px;
-      color: var(--muted);
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 12px;
-    }
-
     @media (max-width: 760px) {
-      .hero {
+      .home-hero {
         grid-template-columns: 1fr;
       }
 
-      h1 {
+      .menu-hero h1 {
         font-size: 34px;
       }
 
@@ -381,6 +466,14 @@
         height: 58px;
         max-width: 260px;
       }
+
+      .nav-links {
+        width: 100%;
+      }
+
+      .nav button {
+        flex: 1;
+      }
     }
   </style>
 </head>
@@ -393,176 +486,219 @@
       </div>
 
       <div class="nav-links">
-        <a href="#demande">Faire ma demande</a>
-        <a href="#admin">Espace gérant</a>
+        <button type="button" onclick="showSection('home')">Accueil</button>
+        <button type="button" onclick="showSection('client')">Espace client</button>
+        <button type="button" onclick="showSection('admin')">Espace gérant</button>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="panel">
-        <span class="badge">Zéro Blabla Garage</span>
-
-        <h1>Carte grise</h1>
-
-        <p>
-          Déposez votre demande de changement de titulaire. Votre dossier est reçu par Zéro Blabla Garage,
-          vérifié, puis traité avec l’accès SIV du garage.
-        </p>
-
-        <div class="steps">
-          <div class="step">
-            <span class="num">1</span>
-            <span>Remplissez vos informations et celles du véhicule.</span>
-          </div>
-
-          <div class="step">
-            <span class="num">2</span>
-            <span>Ajoutez les documents nécessaires.</span>
-          </div>
-
-          <div class="step">
-            <span class="num">3</span>
-            <span>Recevez votre référence de dossier.</span>
-          </div>
+    <section id="homeSection">
+      <div class="home-hero">
+        <div class="menu-hero">
+          <h1>Carte grise simple, rapide, zéro blabla.</h1>
+          <p>
+            Bienvenue chez Zéro Blabla Garage. Connectez-vous à votre espace client
+            pour faire une demande de changement de titulaire et suivre votre dossier.
+          </p>
         </div>
 
-        <div class="legal">
-          Service privé de gestion de dossier. Cette page n’est pas le site officiel de l’ANTS ou de l’État.
-          Les informations de contact, mentions légales, paiement et politique de confidentialité devront être ajoutés avant usage réel avec des clients.
+        <div class="menu-actions">
+          <button class="menu-card" type="button" onclick="showSection('client')">
+            <span class="menu-icon">1</span>
+            <h2>Espace client</h2>
+            <p>
+              Créez un compte, connectez-vous, envoyez vos documents et suivez vos dossiers.
+            </p>
+          </button>
+
+          <button class="menu-card" type="button" onclick="showSection('admin')">
+            <span class="menu-icon">2</span>
+            <h2>Espace gérant</h2>
+            <p>
+              Connexion réservée à Zéro Blabla Garage pour consulter et suivre tous les dossiers.
+            </p>
+          </button>
         </div>
-      </div>
-
-      <div class="panel">
-        <h2>Documents utiles</h2>
-
-        <p class="muted">Préparez les fichiers au format photo ou PDF.</p>
-
-        <ul>
-          <li>Carte grise barrée</li>
-          <li>Certificat de cession</li>
-          <li>Pièce d’identité</li>
-          <li>Justificatif de domicile</li>
-          <li>Contrôle technique si concerné</li>
-          <li>Mandat / documents complémentaires si besoin</li>
-        </ul>
-
-        <p class="muted">
-          Le prix dépendra du montant de la carte grise et du dossier.
-        </p>
       </div>
     </section>
 
-    <section id="demande" class="panel">
-      <h2>Faire une demande</h2>
+    <section id="clientSection" class="panel hidden">
+      <button class="back-btn" type="button" onclick="showSection('home')">← Retour au menu</button>
 
-      <p class="muted">
-        Changement de titulaire — carte grise.
-      </p>
+      <h2>Espace client</h2>
+      <p class="muted">Connectez-vous pour faire une demande et suivre vos dossiers.</p>
 
-      <form id="dossierForm">
-        <h3>Vos informations</h3>
-
+      <div id="clientAuthBox">
         <div class="grid-2">
-          <div>
-            <label>Prénom</label>
-            <input id="client_prenom" required />
+          <div class="panel" style="box-shadow:none;">
+            <h3>Créer un compte</h3>
+
+            <form id="clientSignupForm">
+              <div>
+                <label>Email</label>
+                <input id="clientSignupEmail" type="email" required />
+              </div>
+
+              <div>
+                <label>Mot de passe</label>
+                <input id="clientSignupPassword" type="password" required />
+              </div>
+
+              <button class="btn green" type="submit">Créer mon compte</button>
+              <div id="clientSignupMessage" class="notice"></div>
+            </form>
           </div>
 
-          <div>
-            <label>Nom</label>
-            <input id="client_nom" required />
-          </div>
+          <div class="panel" style="box-shadow:none;">
+            <h3>Se connecter</h3>
 
-          <div>
-            <label>Adresse</label>
-            <input id="client_adresse" required />
-          </div>
+            <form id="clientLoginForm">
+              <div>
+                <label>Email</label>
+                <input id="clientLoginEmail" type="email" required />
+              </div>
 
-          <div>
-            <label>Code postal</label>
-            <input id="client_code_postal" required />
-          </div>
+              <div>
+                <label>Mot de passe</label>
+                <input id="clientLoginPassword" type="password" required />
+              </div>
 
-          <div>
-            <label>Ville</label>
-            <input id="client_ville" required />
-          </div>
-        </div>
-
-        <h3>Véhicule</h3>
-
-        <div class="grid-2">
-          <div>
-            <label>Immatriculation</label>
-            <input id="vehicule_immatriculation" placeholder="AA-123-AA" required />
-          </div>
-
-          <div>
-            <label>Date du CI</label>
-            <input id="vehicule_marque" type="date" required />
-          </div>
-
-          <div>
-            <label>Numéro de formule</label>
-            <input id="vehicule_modele" placeholder="Exemple : 2019AB12345" required />
-          </div>
-
-          <div>
-            <label>Numéro VIN / série</label>
-            <input id="vehicule_vin" />
+              <button class="btn" type="submit">Se connecter</button>
+              <div id="clientLoginMessage" class="notice"></div>
+            </form>
           </div>
         </div>
+      </div>
 
-        <h3>Documents</h3>
-
-        <div class="grid-2">
-          <div class="file-card">
-            <label>Carte grise barrée</label>
-            <input id="doc_carte_grise" type="file" accept="image/*,.pdf" />
-          </div>
-
-          <div class="file-card">
-            <label>Certificat de cession</label>
-            <input id="doc_cession" type="file" accept="image/*,.pdf" />
-          </div>
-
-          <div class="file-card">
-            <label>Pièce d’identité</label>
-            <input id="doc_identite" type="file" accept="image/*,.pdf" />
-          </div>
-
-          <div class="file-card">
-            <label>Justificatif de domicile</label>
-            <input id="doc_domicile" type="file" accept="image/*,.pdf" />
-          </div>
-
-          <div class="file-card">
-            <label>Contrôle technique</label>
-            <input id="doc_controle" type="file" accept="image/*,.pdf" />
-          </div>
-
-          <div class="file-card">
-            <label>Autre document</label>
-            <input id="doc_autre" type="file" accept="image/*,.pdf" />
-          </div>
+      <div id="clientDashboard" class="client-dashboard hidden">
+        <div class="tabs">
+          <button class="tab active" type="button" onclick="showClientForm()">Faire ma demande</button>
+          <button class="tab" type="button" onclick="loadClientDossiers()">Mes dossiers</button>
+          <button class="tab" type="button" onclick="clientSignOut()">Déconnexion</button>
         </div>
 
-        <div>
-          <label>Message / précision</label>
-          <textarea id="notes_client" placeholder="Exemple : achat récent, urgence, document manquant..."></textarea>
+        <div id="clientWelcomeMessage" class="notice success">
+          Vous êtes connecté à votre espace client.
         </div>
 
-        <button class="btn" type="submit" id="submitBtn">
-          Envoyer ma demande
-        </button>
+        <div id="clientFormBox">
+          <h2>Faire une demande</h2>
+          <p class="muted">Changement de titulaire — carte grise.</p>
 
-        <div id="formMessage" class="notice"></div>
-      </form>
+          <form id="dossierForm">
+            <h3>Vos informations</h3>
+
+            <div class="grid-2">
+              <div>
+                <label>Prénom</label>
+                <input id="client_prenom" required />
+              </div>
+
+              <div>
+                <label>Nom</label>
+                <input id="client_nom" required />
+              </div>
+
+              <div>
+                <label>Adresse</label>
+                <input id="client_adresse" required />
+              </div>
+
+              <div>
+                <label>Code postal</label>
+                <input id="client_code_postal" required />
+              </div>
+
+              <div>
+                <label>Ville</label>
+                <input id="client_ville" required />
+              </div>
+            </div>
+
+            <h3>Véhicule</h3>
+
+            <div class="grid-2">
+              <div>
+                <label>Immatriculation</label>
+                <input id="vehicule_immatriculation" placeholder="AA-123-AA" required />
+              </div>
+
+              <div>
+                <label>Date du CI</label>
+                <input id="vehicule_marque" type="date" required />
+              </div>
+
+              <div>
+                <label>Numéro de formule</label>
+                <input id="vehicule_modele" placeholder="Exemple : 2019AB12345" required />
+              </div>
+
+              <div>
+                <label>Numéro VIN / série</label>
+                <input id="vehicule_vin" />
+              </div>
+            </div>
+
+            <h3>Documents</h3>
+
+            <div class="grid-2">
+              <div class="file-card">
+                <label>Carte grise barrée</label>
+                <input id="doc_carte_grise" type="file" accept="image/*,.pdf" />
+              </div>
+
+              <div class="file-card">
+                <label>Certificat de cession</label>
+                <input id="doc_cession" type="file" accept="image/*,.pdf" />
+              </div>
+
+              <div class="file-card">
+                <label>Pièce d’identité</label>
+                <input id="doc_identite" type="file" accept="image/*,.pdf" />
+              </div>
+
+              <div class="file-card">
+                <label>Justificatif de domicile</label>
+                <input id="doc_domicile" type="file" accept="image/*,.pdf" />
+              </div>
+
+              <div class="file-card">
+                <label>Contrôle technique</label>
+                <input id="doc_controle" type="file" accept="image/*,.pdf" />
+              </div>
+
+              <div class="file-card">
+                <label>Autre document</label>
+                <input id="doc_autre" type="file" accept="image/*,.pdf" />
+              </div>
+            </div>
+
+            <div>
+              <label>Message / précision</label>
+              <textarea id="notes_client" placeholder="Exemple : achat récent, urgence, document manquant..."></textarea>
+            </div>
+
+            <button class="btn" type="submit" id="submitBtn">
+              Envoyer ma demande
+            </button>
+
+            <div id="formMessage" class="notice"></div>
+          </form>
+        </div>
+
+        <div id="clientDossiersBox" class="hidden">
+          <h2>Mes dossiers</h2>
+          <div id="clientDossiersMessage" class="notice info">Chargement...</div>
+          <div id="clientDossierList" class="dossier-list"></div>
+        </div>
+      </div>
     </section>
 
-    <section id="admin" class="panel" style="margin-top:24px;">
+    <section id="adminSection" class="panel hidden">
+      <button class="back-btn" type="button" onclick="showSection('home')">← Retour au menu</button>
+
       <h2>Espace gérant</h2>
 
       <p class="muted">
@@ -593,11 +729,11 @@
 
       <div id="adminBox" class="hidden">
         <div class="tabs">
-          <button class="tab active" type="button" onclick="loadDossiers()">
+          <button class="tab active" type="button" onclick="loadAdminDossiers()">
             Actualiser les dossiers
           </button>
 
-          <button class="tab" type="button" onclick="signOut()">
+          <button class="tab" type="button" onclick="adminSignOut()">
             Déconnexion
           </button>
         </div>
@@ -627,6 +763,28 @@
     const formMessage = document.getElementById("formMessage");
     const submitBtn = document.getElementById("submitBtn");
 
+    let currentUser = null;
+
+    function showSection(section) {
+      document.getElementById("homeSection").classList.add("hidden");
+      document.getElementById("clientSection").classList.add("hidden");
+      document.getElementById("adminSection").classList.add("hidden");
+
+      if (section === "home") {
+        document.getElementById("homeSection").classList.remove("hidden");
+      }
+
+      if (section === "client") {
+        document.getElementById("clientSection").classList.remove("hidden");
+      }
+
+      if (section === "admin") {
+        document.getElementById("adminSection").classList.remove("hidden");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     function showMessage(el, type, text) {
       el.className = "notice " + type;
       el.innerHTML = text;
@@ -649,7 +807,108 @@
       return "SIV-" + random;
     }
 
-    async function uploadOneFile(dossierId, fileInputId, typeDocument) {
+    async function getCurrentUser() {
+      const { data } = await client.auth.getSession();
+      currentUser = data && data.session ? data.session.user : null;
+      return currentUser;
+    }
+
+    async function getMyProfile() {
+      const user = await getCurrentUser();
+
+      if (!user) {
+        return null;
+      }
+
+      const { data, error } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (error) {
+        return null;
+      }
+
+      return data;
+    }
+
+    async function refreshAuthUI() {
+      const user = await getCurrentUser();
+
+      if (user) {
+        document.getElementById("clientAuthBox").classList.add("hidden");
+        document.getElementById("clientDashboard").classList.remove("hidden");
+        document.getElementById("clientWelcomeMessage").innerHTML =
+          "Vous êtes connecté : <strong>" + user.email + "</strong>";
+      } else {
+        document.getElementById("clientAuthBox").classList.remove("hidden");
+        document.getElementById("clientDashboard").classList.add("hidden");
+      }
+    }
+
+    function showClientForm() {
+      document.getElementById("clientFormBox").classList.remove("hidden");
+      document.getElementById("clientDossiersBox").classList.add("hidden");
+    }
+
+    document.getElementById("clientSignupForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = getValue("clientSignupEmail");
+      const password = getValue("clientSignupPassword");
+      const msg = document.getElementById("clientSignupMessage");
+
+      showMessage(msg, "info", "Création du compte...");
+
+      const { data, error } = await client.auth.signUp({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        showMessage(msg, "error", "Erreur : " + error.message);
+        return;
+      }
+
+      showMessage(
+        msg,
+        "success",
+        "Compte créé ✅ Vous pouvez maintenant vous connecter. Si Supabase demande une confirmation email, vérifiez votre boîte mail."
+      );
+    });
+
+    document.getElementById("clientLoginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = getValue("clientLoginEmail");
+      const password = getValue("clientLoginPassword");
+      const msg = document.getElementById("clientLoginMessage");
+
+      showMessage(msg, "info", "Connexion...");
+
+      const { data, error } = await client.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        showMessage(msg, "error", "Connexion impossible : " + error.message);
+        return;
+      }
+
+      await refreshAuthUI();
+      showClientForm();
+    });
+
+    async function clientSignOut() {
+      await client.auth.signOut();
+      currentUser = null;
+      document.getElementById("clientDossierList").innerHTML = "";
+      await refreshAuthUI();
+    }
+
+    async function uploadOneFile(userId, dossierId, fileInputId, typeDocument) {
       const input = document.getElementById(fileInputId);
 
       if (!input || !input.files || input.files.length === 0) {
@@ -659,6 +918,8 @@
       const file = input.files[0];
 
       const path =
+        userId +
+        "/" +
         dossierId +
         "/" +
         typeDocument +
@@ -697,6 +958,13 @@
     document.getElementById("dossierForm").addEventListener("submit", async (event) => {
       event.preventDefault();
 
+      const user = await getCurrentUser();
+
+      if (!user) {
+        showMessage(formMessage, "error", "Vous devez être connecté pour envoyer une demande.");
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = "Envoi en cours...";
 
@@ -711,13 +979,14 @@
 
       const dossier = {
         id: dossierId,
+        user_id: user.id,
         reference: reference,
         service: "changement_titulaire",
         statut: "recu",
 
         client_prenom: getValue("client_prenom"),
         client_nom: getValue("client_nom"),
-        client_email: null,
+        client_email: user.email,
         client_telephone: null,
         client_adresse: getValue("client_adresse"),
         client_code_postal: getValue("client_code_postal"),
@@ -741,12 +1010,12 @@
           throw inserted.error;
         }
 
-        await uploadOneFile(dossierId, "doc_carte_grise", "carte_grise_barree");
-        await uploadOneFile(dossierId, "doc_cession", "certificat_cession");
-        await uploadOneFile(dossierId, "doc_identite", "piece_identite");
-        await uploadOneFile(dossierId, "doc_domicile", "justificatif_domicile");
-        await uploadOneFile(dossierId, "doc_controle", "controle_technique");
-        await uploadOneFile(dossierId, "doc_autre", "autre_document");
+        await uploadOneFile(user.id, dossierId, "doc_carte_grise", "carte_grise_barree");
+        await uploadOneFile(user.id, dossierId, "doc_cession", "certificat_cession");
+        await uploadOneFile(user.id, dossierId, "doc_identite", "piece_identite");
+        await uploadOneFile(user.id, dossierId, "doc_domicile", "justificatif_domicile");
+        await uploadOneFile(user.id, dossierId, "doc_controle", "controle_technique");
+        await uploadOneFile(user.id, dossierId, "doc_autre", "autre_document");
 
         document.getElementById("dossierForm").reset();
 
@@ -757,6 +1026,8 @@
             reference +
             "</strong><br>Conservez cette référence."
         );
+
+        await loadClientDossiers();
       } catch (error) {
         console.error(error);
 
@@ -770,6 +1041,47 @@
         submitBtn.textContent = "Envoyer ma demande";
       }
     });
+
+    async function loadClientDossiers() {
+      document.getElementById("clientFormBox").classList.add("hidden");
+      document.getElementById("clientDossiersBox").classList.remove("hidden");
+
+      const msg = document.getElementById("clientDossiersMessage");
+      const list = document.getElementById("clientDossierList");
+
+      showMessage(msg, "info", "Chargement de vos dossiers...");
+      list.innerHTML = "";
+
+      const user = await getCurrentUser();
+
+      if (!user) {
+        showMessage(msg, "error", "Vous devez être connecté.");
+        return;
+      }
+
+      const { data: dossiers, error } = await client
+        .from("dossiers_siv")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        showMessage(msg, "error", "Erreur chargement : " + error.message);
+        return;
+      }
+
+      if (!dossiers || dossiers.length === 0) {
+        showMessage(msg, "info", "Aucun dossier pour l’instant.");
+        return;
+      }
+
+      showMessage(msg, "success", dossiers.length + " dossier(s) trouvé(s).");
+
+      for (const dossier of dossiers) {
+        const docs = await loadDocs(dossier.id);
+        list.appendChild(renderDossier(dossier, docs, false));
+      }
+    }
 
     document.getElementById("loginForm").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -794,15 +1106,23 @@
         return;
       }
 
+      const profile = await getMyProfile();
+
+      if (!profile || profile.role !== "gerant") {
+        await client.auth.signOut();
+        showMessage(loginMessage, "error", "Accès refusé : ce compte n’est pas gérant.");
+        return;
+      }
+
       document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("adminBox").classList.remove("hidden");
 
       showMessage(loginMessage, "success", "Connecté.");
 
-      loadDossiers();
+      loadAdminDossiers();
     });
 
-    async function signOut() {
+    async function adminSignOut() {
       await client.auth.signOut();
 
       document.getElementById("loginBox").classList.remove("hidden");
@@ -810,7 +1130,7 @@
       document.getElementById("dossierList").innerHTML = "";
     }
 
-    async function loadDossiers() {
+    async function loadAdminDossiers() {
       const adminMessage = document.getElementById("adminMessage");
       const list = document.getElementById("dossierList");
 
@@ -845,7 +1165,7 @@
 
       for (const dossier of dossiers) {
         const docs = await loadDocs(dossier.id);
-        list.appendChild(renderDossier(dossier, docs));
+        list.appendChild(renderDossier(dossier, docs, true));
       }
     }
 
@@ -875,7 +1195,7 @@
       return data.signedUrl;
     }
 
-    function renderDossier(dossier, docs) {
+    function renderDossier(dossier, docs, isAdmin) {
       const card = document.createElement("div");
       card.className = "dossier-card";
 
@@ -886,6 +1206,22 @@
             </button>
           `).join("")
         : `<span class="muted">Aucun document envoyé.</span>`;
+
+      const adminStatusHtml = isAdmin
+        ? `
+          <div>
+            <label>Changer le statut</label>
+
+            <select data-dossier-id="${dossier.id}" class="statusSelect">
+              <option value="recu" ${dossier.statut === "recu" ? "selected" : ""}>Reçu</option>
+              <option value="incomplet" ${dossier.statut === "incomplet" ? "selected" : ""}>Incomplet</option>
+              <option value="verification" ${dossier.statut === "verification" ? "selected" : ""}>En vérification</option>
+              <option value="traitement_siv" ${dossier.statut === "traitement_siv" ? "selected" : ""}>En traitement SIV</option>
+              <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Terminé</option>
+            </select>
+          </div>
+        `
+        : "";
 
       card.innerHTML = `
         <div class="dossier-top">
@@ -900,6 +1236,7 @@
 
         <div class="small-grid">
           <div><strong>Client :</strong> ${dossier.client_prenom || ""} ${dossier.client_nom || ""}</div>
+          <div><strong>Email :</strong> ${dossier.client_email || ""}</div>
           <div><strong>Ville :</strong> ${dossier.client_code_postal || ""} ${dossier.client_ville || ""}</div>
           <div><strong>Immat :</strong> ${dossier.vehicule_immatriculation || ""}</div>
           <div><strong>Date du CI :</strong> ${dossier.vehicule_marque || ""}</div>
@@ -910,17 +1247,7 @@
           <strong>Note client :</strong> ${dossier.notes_client || "Aucune"}
         </p>
 
-        <div>
-          <label>Changer le statut</label>
-
-          <select data-dossier-id="${dossier.id}" class="statusSelect">
-            <option value="recu" ${dossier.statut === "recu" ? "selected" : ""}>Reçu</option>
-            <option value="incomplet" ${dossier.statut === "incomplet" ? "selected" : ""}>Incomplet</option>
-            <option value="verification" ${dossier.statut === "verification" ? "selected" : ""}>En vérification</option>
-            <option value="traitement_siv" ${dossier.statut === "traitement_siv" ? "selected" : ""}>En traitement SIV</option>
-            <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Terminé</option>
-          </select>
-        </div>
+        ${adminStatusHtml}
 
         <div class="doc-links">
           ${docsHtml}
@@ -959,12 +1286,12 @@
       return card;
     }
 
-    client.auth.getSession().then(({ data }) => {
+    client.auth.getSession().then(async ({ data }) => {
       if (data && data.session) {
-        document.getElementById("loginBox").classList.add("hidden");
-        document.getElementById("adminBox").classList.remove("hidden");
-        loadDossiers();
+        currentUser = data.session.user;
       }
+
+      await refreshAuthUI();
     });
   </script>
 </body>
