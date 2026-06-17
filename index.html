@@ -1386,23 +1386,38 @@
       });
 
       card.querySelectorAll(".statusSelect").forEach((select) => {
-        select.addEventListener("change", async () => {
-          const dossierId = select.dataset.dossierId;
-          const newStatus = select.value;
+  select.addEventListener("change", async () => {
+    const dossierId = select.dataset.dossierId;
+    const newStatus = select.value;
 
-          const { error } = await client
-            .from("dossiers_siv")
-            .update({ statut: newStatus })
-            .eq("id", dossierId);
+    select.disabled = true;
 
-          if (error) {
-            alert("Erreur statut : " + error.message);
-          } else {
-            alert("Statut mis à jour.");
-            loadAdminDossiers();
-          }
-        });
+    try {
+      const { data, error } = await client.functions.invoke("update-dossier-status", {
+        body: {
+          dossier_id: dossierId,
+          new_status: newStatus
+        }
       });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data && data.error) {
+        throw new Error(data.error);
+      }
+
+      alert("Statut mis à jour et email envoyé au client ✅");
+      await loadAdminDossiers();
+    } catch (error) {
+      alert("Erreur : " + (error.message || "impossible de mettre à jour le statut."));
+      await loadAdminDossiers();
+    } finally {
+      select.disabled = false;
+    }
+  });
+});
 
       return card;
     }
