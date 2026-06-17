@@ -310,6 +310,10 @@
       background: var(--green);
     }
 
+    .btn.orange {
+      background: #f97316;
+    }
+
     .muted {
       color: var(--muted);
       font-size: 14px;
@@ -511,6 +515,20 @@
       margin-top: 12px;
       display: grid;
       gap: 8px;
+    }
+
+    .admin-send-box {
+      margin-top: 14px;
+      border: 1px solid #bfdbfe;
+      background: linear-gradient(135deg, #eff6ff, #f8fafc);
+      padding: 14px;
+      border-radius: 16px;
+    }
+
+    .admin-send-box h4 {
+      margin: 0 0 10px;
+      color: #0f172a;
+      font-size: 18px;
     }
 
     footer {
@@ -920,6 +938,20 @@
       return "status " + (status || "recu");
     }
 
+    function documentLabel(type) {
+      const labels = {
+        carte_grise_barree: "Carte grise barrée",
+        certificat_cession: "Certificat de cession",
+        piece_identite: "Pièce d’identité",
+        justificatif_domicile: "Justificatif de domicile",
+        controle_technique: "Contrôle technique",
+        autre_document: "Autre document",
+        carte_grise_finale: "Carte grise finale"
+      };
+
+      return labels[type] || type;
+    }
+
     async function getCurrentUser() {
       const { data } = await client.auth.getSession();
       currentUser = data && data.session ? data.session.user : null;
@@ -1318,7 +1350,7 @@
       const docsHtml = docs.length
         ? docs.map((doc) => `
             <button class="tab" type="button" data-path="${doc.chemin_stockage}">
-              Télécharger ${doc.type_document}
+              Télécharger ${documentLabel(doc.type_document)}
             </button>
           `).join("")
         : `<span class="muted">Aucun document envoyé.</span>`;
@@ -1339,6 +1371,24 @@
               <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Dossier terminé</option>
               <option value="refuse" ${dossier.statut === "refuse" ? "selected" : ""}>Dossier refusé</option>
             </select>
+          </div>
+
+          <div class="admin-send-box">
+            <h4>Envoyer un message / PDF au client</h4>
+
+            <label>Message au client</label>
+            <textarea class="managerMessageInput" placeholder="Exemple : Bonjour, votre carte grise est prête. Vous pouvez la télécharger ci-dessous."></textarea>
+
+            <label style="margin-top:12px;">PDF carte grise finale</label>
+            <input class="carteGrisePdfInput" type="file" accept="application/pdf,.pdf" />
+
+            <button class="btn green sendCarteGriseBtn" type="button" style="margin-top:12px;">
+              Envoyer la carte grise au client
+            </button>
+
+            <p class="muted">
+              Le client recevra un email avec votre message et un bouton pour télécharger le PDF.
+            </p>
           </div>
         `
         : "";
@@ -1386,38 +1436,119 @@
       });
 
       card.querySelectorAll(".statusSelect").forEach((select) => {
-  select.addEventListener("change", async () => {
-    const dossierId = select.dataset.dossierId;
-    const newStatus = select.value;
+        select.addEventListener("change", async () => {
+          const dossierId = select.dataset.dossierId;
+          const newStatus = select.value;
+          const managerMessageInput = card.querySelector(".managerMessageInput");
+          const managerMessage = managerMessageInput ? managerMessageInput.value.trim() : "";
 
-    select.disabled = true;
+          select.disabled = true;
 
-    try {
-      const { data, error } = await client.functions.invoke("swift-api", {
-        body: {
-          dossier_id: dossierId,
-          new_status: newStatus
-        }
+          try {
+            const { data, error } = await client.functions.invoke("swift-api", {
+              body: {
+                dossier_id: dossierId,
+                new_status: newStatus,
+                manager_message: managerMessage
+              }
+            });
+
+            if (error) {
+              throw error;
+            }
+
+            if (data && data.error) {
+              throw new Error(data.error);
+            }
+
+            alert("Statut mis à jour et email envoyé au client ✅");
+            await loadAdminDossiers();
+          } catch (error) {
+            alert("Erreur : " + (error.message || "impossible de mettre à jour le statut."));
+            await loadAdminDossiers();
+          } finally {
+            select.disabled = false;
+          }
+        });
       });
 
-      if (error) {
-        throw error;
-      }
+      const sendCarteGriseBtn = card.querySelector(".sendCarteGriseBtn");
 
-      if (data && data.error) {
-        throw new Error(data.error);
-      }
+      if (sendCarteGriseBtn) {
+        sendCarteGriseBtn.addEventListener("click", async () => {
+          const pdfInput = card.querySelector(".carteGrisePdfInput");
+          const managerMessageInput = card.querySelector(".managerMessageInput");
+          const managerMessage = managerMessageInput ? managerMessageInput.value.trim() : "";
 
-      alert("Statut mis à jour et email envoyé au client ✅");
-      await loadAdminDossiers();
-    } catch (error) {
-      alert("Erreur : " + (error.message || "impossible de mettre à jour le statut."));
-      await loadAdminDossiers();
-    } finally {
-      select.disabled = false;
-    }
-  });
-});
+          if (!pdfInput || !pdfInput.files || pdfInput.files.length === 0) {
+            alert("Ajoute d’abord le PDF de la carte grise.");
+            return;
+          }
+
+          const file = pdfInput.files[0];
+
+          if (!file.name.toLowerCase().endsWith(".pdf")) {
+            alert("Le fichier doit être un PDF.");
+            return;
+          }
+
+          sendCarteGriseBtn.disabled = true;
+          sendCarteGriseBtn.textContent = "Envoi en cours...";
+
+          try {
+            const ownerId = dossier.user_id || (currentUser ? currentUser.id : "gerant");
+
+            const pdfPath =
+              ownerId +
+              "/" +
+              dossier.id +
+              "/carte_grise_finale/" +
+              Date.now() +
+              "-" +
+              safeFileName(file.name);
+
+            const upload = await client.storage
+              .from("documents-siv")
+              .upload(pdfPath, file, {
+                cacheControl: "3600",
+                upsert: false
+              });
+
+            if (upload.error) {
+              throw upload.error;
+            }
+
+            const { data, error } = await client.functions.invoke("swift-api", {
+              body: {
+                dossier_id: dossier.id,
+                new_status: "carte_grise_disponible",
+                manager_message: managerMessage,
+                pdf_path: pdfPath,
+                pdf_file_name: file.name,
+                pdf_mime_type: file.type || "application/pdf",
+                pdf_size: file.size
+              }
+            });
+
+            if (error) {
+              throw error;
+            }
+
+            if (data && data.error) {
+              throw new Error(data.error);
+            }
+
+            alert("Carte grise envoyée au client ✅");
+            await loadAdminDossiers();
+          } catch (error) {
+            alert("Erreur : " + (error.message || "impossible d’envoyer la carte grise."));
+            await loadAdminDossiers();
+          } finally {
+            sendCarteGriseBtn.disabled = false;
+            sendCarteGriseBtn.textContent = "Envoyer la carte grise au client";
+          }
+        });
+      }
 
       return card;
     }
