@@ -511,6 +511,88 @@
       font-size: 14px;
     }
 
+    .timeline-box {
+      margin-top: 18px;
+      border: 1px solid #dbeafe;
+      background: linear-gradient(135deg, #eff6ff, #ffffff);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .timeline-box h4 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: #0f172a;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 0;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      position: relative;
+      padding-bottom: 16px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: #16a34a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 8px 18px rgba(22, 163, 74, 0.25);
+    }
+
+    .timeline-item:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 30px;
+      bottom: -2px;
+      width: 2px;
+      background: #bbf7d0;
+    }
+
+    .timeline-content {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .timeline-title {
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .timeline-message {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .timeline-date {
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
     .doc-links {
       margin-top: 12px;
       display: grid;
@@ -952,6 +1034,51 @@
       return labels[type] || type;
     }
 
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderHistoriqueHtml(historique, dossier) {
+      let items = historique || [];
+
+      if (!items.length) {
+        items = [
+          {
+            titre: statusLabel(dossier.statut),
+            message: "Dernière étape connue du dossier.",
+            created_at: dossier.created_at
+          }
+        ];
+      }
+
+      return `
+        <div class="timeline-box">
+          <h4>Suivi du dossier</h4>
+
+          <div class="timeline">
+            ${items.map((item) => `
+              <div class="timeline-item">
+                <div class="timeline-dot">✓</div>
+
+                <div class="timeline-content">
+                  <div class="timeline-title">${escapeHtml(item.titre || statusLabel(item.statut))}</div>
+                  <div class="timeline-message">${escapeHtml(item.message || "")}</div>
+                  <div class="timeline-date">
+                    ${item.created_at ? new Date(item.created_at).toLocaleString("fr-FR") : ""}
+                  </div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
     async function getCurrentUser() {
       const { data } = await client.auth.getSession();
       currentUser = data && data.session ? data.session.user : null;
@@ -1227,7 +1354,8 @@
 
       for (const dossier of dossiers) {
         const docs = await loadDocs(dossier.id);
-        list.appendChild(renderDossier(dossier, docs, false));
+        const historique = await loadHistorique(dossier.id);
+        list.appendChild(renderDossier(dossier, docs, false, historique));
       }
     }
 
@@ -1313,13 +1441,28 @@
 
       for (const dossier of dossiers) {
         const docs = await loadDocs(dossier.id);
-        list.appendChild(renderDossier(dossier, docs, true));
+        const historique = await loadHistorique(dossier.id);
+        list.appendChild(renderDossier(dossier, docs, true, historique));
       }
     }
 
     async function loadDocs(dossierId) {
       const { data, error } = await client
         .from("documents_siv")
+        .select("*")
+        .eq("dossier_id", dossierId)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        return [];
+      }
+
+      return data || [];
+    }
+
+    async function loadHistorique(dossierId) {
+      const { data, error } = await client
+        .from("historique_siv")
         .select("*")
         .eq("dossier_id", dossierId)
         .order("created_at", { ascending: true });
@@ -1343,7 +1486,7 @@
       return data.signedUrl;
     }
 
-    function renderDossier(dossier, docs, isAdmin) {
+    function renderDossier(dossier, docs, isAdmin, historique) {
       const card = document.createElement("div");
       card.className = "dossier-card";
 
@@ -1393,10 +1536,12 @@
         `
         : "";
 
+      const timelineHtml = renderHistoriqueHtml(historique, dossier);
+
       card.innerHTML = `
         <div class="dossier-top">
           <div>
-            <div class="ref">${dossier.reference || dossier.id}</div>
+            <div class="ref">${escapeHtml(dossier.reference || dossier.id)}</div>
             <div class="muted">
               Créé le ${new Date(dossier.created_at).toLocaleString("fr-FR")}
             </div>
@@ -1405,19 +1550,21 @@
         </div>
 
         <div class="small-grid">
-          <div><strong>Client :</strong> ${dossier.client_prenom || ""} ${dossier.client_nom || ""}</div>
-          <div><strong>Email :</strong> ${dossier.client_email || ""}</div>
-          <div><strong>Ville :</strong> ${dossier.client_code_postal || ""} ${dossier.client_ville || ""}</div>
-          <div><strong>Immat :</strong> ${dossier.vehicule_immatriculation || ""}</div>
-          <div><strong>Date du CI :</strong> ${dossier.vehicule_marque || ""}</div>
-          <div><strong>Numéro de formule :</strong> ${dossier.vehicule_modele || ""}</div>
+          <div><strong>Client :</strong> ${escapeHtml(dossier.client_prenom || "")} ${escapeHtml(dossier.client_nom || "")}</div>
+          <div><strong>Email :</strong> ${escapeHtml(dossier.client_email || "")}</div>
+          <div><strong>Ville :</strong> ${escapeHtml(dossier.client_code_postal || "")} ${escapeHtml(dossier.client_ville || "")}</div>
+          <div><strong>Immat :</strong> ${escapeHtml(dossier.vehicule_immatriculation || "")}</div>
+          <div><strong>Date du CI :</strong> ${escapeHtml(dossier.vehicule_marque || "")}</div>
+          <div><strong>Numéro de formule :</strong> ${escapeHtml(dossier.vehicule_modele || "")}</div>
         </div>
 
         <p>
-          <strong>Note client :</strong> ${dossier.notes_client || "Aucune"}
+          <strong>Note client :</strong> ${escapeHtml(dossier.notes_client || "Aucune")}
         </p>
 
         ${adminStatusHtml}
+
+        ${timelineHtml}
 
         <div class="doc-links">
           ${docsHtml}
