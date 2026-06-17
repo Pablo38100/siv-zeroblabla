@@ -1212,7 +1212,7 @@
         document.getElementById("clientAuthBox").classList.add("hidden");
         document.getElementById("clientDashboard").classList.remove("hidden");
         document.getElementById("clientWelcomeMessage").innerHTML =
-          "Vous êtes connecté : <strong>" + user.email + "</strong>";
+  "Vous êtes connecté à votre espace client.";
       } else {
         document.getElementById("clientAuthBox").classList.remove("hidden");
         document.getElementById("clientDashboard").classList.add("hidden");
@@ -1679,7 +1679,7 @@
 
         <div class="small-grid">
           <div><strong>Client :</strong> ${escapeHtml(dossier.client_prenom || "")} ${escapeHtml(dossier.client_nom || "")}</div>
-          <div><strong>Email :</strong> ${escapeHtml(dossier.client_email || "")}</div>
+          ${isAdmin ? `<div><strong>Email :</strong> ${escapeHtml(dossier.client_email || "")}</div>` : ""}
           <div><strong>Téléphone :</strong> ${escapeHtml(dossier.client_telephone || "Non renseigné")}</div>
           <div><strong>Ville :</strong> ${escapeHtml(dossier.client_code_postal || "")} ${escapeHtml(dossier.client_ville || "")}</div>
           <div><strong>Immat :</strong> ${escapeHtml(dossier.vehicule_immatriculation || "")}</div>
