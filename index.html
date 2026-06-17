@@ -314,6 +314,26 @@
       background: #f97316;
     }
 
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: #22c55e;
+      color: white;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 12px 26px rgba(34, 197, 94, 0.25);
+    }
+
+    .whatsapp-btn:hover {
+      background: #16a34a;
+    }
+
     .muted {
       color: var(--muted);
       font-size: 14px;
@@ -366,6 +386,14 @@
       background: #0f172a;
       color: white;
       border-color: #0f172a;
+    }
+
+    .search-box {
+      margin: 14px 0 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #dbeafe;
     }
 
     .client-dashboard {
@@ -790,6 +818,11 @@
               </div>
 
               <div>
+                <label>Téléphone / WhatsApp</label>
+                <input id="client_telephone" type="tel" placeholder="Exemple : 06 12 34 56 78" required />
+              </div>
+
+              <div>
                 <label>Adresse</label>
                 <input id="client_adresse" required />
               </div>
@@ -926,6 +959,11 @@
           </button>
         </div>
 
+        <div class="search-box">
+          <label>Rechercher un dossier</label>
+          <input id="adminSearchInput" type="search" oninput="filterAdminDossiers()" placeholder="Nom, téléphone, WhatsApp, email, immat ou référence..." />
+        </div>
+
         <div id="adminMessage" class="notice info">
           Chargement...
         </div>
@@ -1041,6 +1079,68 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function normalizeSearch(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    function normalizePhoneForWhatsApp(phone) {
+      let digits = String(phone || "").replace(/\D/g, "");
+
+      if (!digits) {
+        return "";
+      }
+
+      if (digits.startsWith("00")) {
+        digits = digits.slice(2);
+      }
+
+      if (digits.startsWith("0") && digits.length >= 10) {
+        digits = "33" + digits.slice(1);
+      }
+
+      return digits;
+    }
+
+    function makeWhatsappLink(phone, dossier) {
+      const number = normalizePhoneForWhatsApp(phone);
+
+      if (!number) {
+        return "";
+      }
+
+      const reference = dossier.reference || dossier.id || "";
+      const message =
+        "Bonjour, c’est Zéro Blabla Garage concernant votre dossier " +
+        reference +
+        ".";
+
+      return "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
+    }
+
+    function filterAdminDossiers() {
+      const input = document.getElementById("adminSearchInput");
+
+      if (!input) {
+        return;
+      }
+
+      const query = normalizeSearch(input.value);
+      const cards = document.querySelectorAll("#dossierList .dossier-card");
+
+      cards.forEach((card) => {
+        const content = normalizeSearch(card.dataset.search || card.innerText || "");
+
+        if (!query || content.includes(query)) {
+          card.classList.remove("hidden");
+        } else {
+          card.classList.add("hidden");
+        }
+      });
     }
 
     function renderHistoriqueHtml(historique, dossier) {
@@ -1262,7 +1362,7 @@
         client_prenom: getValue("client_prenom"),
         client_nom: getValue("client_nom"),
         client_email: user.email,
-        client_telephone: null,
+        client_telephone: getValue("client_telephone"),
         client_adresse: getValue("client_adresse"),
         client_code_postal: getValue("client_code_postal"),
         client_ville: getValue("client_ville"),
@@ -1444,6 +1544,8 @@
         const historique = await loadHistorique(dossier.id);
         list.appendChild(renderDossier(dossier, docs, true, historique));
       }
+
+      filterAdminDossiers();
     }
 
     async function loadDocs(dossierId) {
@@ -1490,6 +1592,30 @@
       const card = document.createElement("div");
       card.className = "dossier-card";
 
+      card.dataset.search = normalizeSearch([
+        dossier.reference,
+        dossier.client_prenom,
+        dossier.client_nom,
+        dossier.client_email,
+        dossier.client_telephone,
+        dossier.client_ville,
+        dossier.client_code_postal,
+        dossier.vehicule_immatriculation,
+        dossier.vehicule_vin
+      ].join(" "));
+
+      const whatsappLink = makeWhatsappLink(dossier.client_telephone, dossier);
+
+      const whatsappHtml = isAdmin && whatsappLink
+        ? `
+          <a class="whatsapp-btn" href="${whatsappLink}" target="_blank" rel="noopener">
+            💬 Contacter sur WhatsApp
+          </a>
+        `
+        : isAdmin
+          ? `<p class="muted">Aucun numéro WhatsApp renseigné.</p>`
+          : "";
+
       const docsHtml = docs.length
         ? docs.map((doc) => `
             <button class="tab" type="button" data-path="${doc.chemin_stockage}">
@@ -1515,6 +1641,8 @@
               <option value="refuse" ${dossier.statut === "refuse" ? "selected" : ""}>Dossier refusé</option>
             </select>
           </div>
+
+          ${whatsappHtml}
 
           <div class="admin-send-box">
             <h4>Envoyer un message / PDF au client</h4>
@@ -1552,6 +1680,7 @@
         <div class="small-grid">
           <div><strong>Client :</strong> ${escapeHtml(dossier.client_prenom || "")} ${escapeHtml(dossier.client_nom || "")}</div>
           <div><strong>Email :</strong> ${escapeHtml(dossier.client_email || "")}</div>
+          <div><strong>Téléphone :</strong> ${escapeHtml(dossier.client_telephone || "Non renseigné")}</div>
           <div><strong>Ville :</strong> ${escapeHtml(dossier.client_code_postal || "")} ${escapeHtml(dossier.client_ville || "")}</div>
           <div><strong>Immat :</strong> ${escapeHtml(dossier.vehicule_immatriculation || "")}</div>
           <div><strong>Date du CI :</strong> ${escapeHtml(dossier.vehicule_marque || "")}</div>
