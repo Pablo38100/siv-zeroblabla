@@ -13,7 +13,6 @@
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --navy: #0f172a;
-      --navy-2: #111827;
       --card: #ffffff;
       --text: #111827;
       --muted: #6b7280;
@@ -223,17 +222,6 @@
       line-height: 1.55;
     }
 
-    .badge {
-      display: inline-block;
-      color: #1e40af;
-      background: var(--light-blue);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 800;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -404,15 +392,111 @@
     .ref {
       font-weight: 900;
       color: #1d4ed8;
+      font-size: 18px;
     }
 
     .status {
-      padding: 6px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
       border-radius: 999px;
-      background: #e5e7eb;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
+      border: 1px solid transparent;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.10);
+      animation: statusPop 0.35s ease;
+    }
+
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      animation: statusPulse 1.6s infinite;
+    }
+
+    .status.recu {
+      color: #1d4ed8;
+      background: #dbeafe;
+      border-color: #bfdbfe;
+    }
+
+    .status.documents_manquants,
+    .status.incomplet {
+      color: #b45309;
+      background: #fef3c7;
+      border-color: #fde68a;
+    }
+
+    .status.verification {
+      color: #6d28d9;
+      background: #ede9fe;
+      border-color: #ddd6fe;
+    }
+
+    .status.attente_paiement {
+      color: #c2410c;
+      background: #ffedd5;
+      border-color: #fed7aa;
+    }
+
+    .status.paiement_recu {
+      color: #15803d;
+      background: #dcfce7;
+      border-color: #bbf7d0;
+    }
+
+    .status.traitement_siv {
+      color: #0369a1;
+      background: #e0f2fe;
+      border-color: #bae6fd;
+    }
+
+    .status.carte_grise_disponible {
+      color: #0f766e;
+      background: #ccfbf1;
+      border-color: #99f6e4;
+    }
+
+    .status.termine {
+      color: #166534;
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+
+    .status.refuse {
+      color: #b91c1c;
+      background: #fee2e2;
+      border-color: #fecaca;
+    }
+
+    @keyframes statusPop {
+      from {
+        transform: scale(0.92);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes statusPulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      70% {
+        transform: scale(1.8);
+        opacity: 0.25;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .small-grid {
@@ -473,6 +557,10 @@
 
       .nav button {
         flex: 1;
+      }
+
+      .dossier-top {
+        flex-direction: column;
       }
     }
   </style>
@@ -748,7 +836,7 @@
   </main>
 
   <footer>
-    © 2026 Zéro Blabla Garage — siv-zeroblabla
+    © 2026 Zéro Blabla Garage — Service carte grise
   </footer>
 
   <script>
@@ -805,6 +893,31 @@
     function makeReference() {
       const random = Math.random().toString(36).slice(2, 8).toUpperCase();
       return "SIV-" + random;
+    }
+
+    function statusLabel(status) {
+      const labels = {
+        recu: "Demande reçue",
+        incomplet: "Documents manquants",
+        documents_manquants: "Documents manquants",
+        verification: "Dossier en vérification",
+        attente_paiement: "En attente de paiement",
+        paiement_recu: "Paiement reçu",
+        traitement_siv: "En traitement SIV",
+        carte_grise_disponible: "Carte grise disponible",
+        termine: "Dossier terminé",
+        refuse: "Dossier refusé"
+      };
+
+      return labels[status] || status || "Demande reçue";
+    }
+
+    function statusClass(status) {
+      if (status === "incomplet") {
+        return "status documents_manquants";
+      }
+
+      return "status " + (status || "recu");
     }
 
     async function getCurrentUser() {
@@ -864,20 +977,20 @@
       const { data, error } = await client.auth.signUp({
         email: email,
         password: password,
-          options: {
-           emailRedirectTo: "https://pablo38100.github.io/siv-zeroblabla/"
+        options: {
+          emailRedirectTo: "https://pablo38100.github.io/siv-zeroblabla/"
         }
       });
 
       if (error) {
-        showMessage(msg, "error", "Erreur : " + error.message);
+        showMessage(msg, "error", "Erreur : " + (error.message || JSON.stringify(error)));
         return;
       }
 
       showMessage(
         msg,
         "success",
-        "Compte créé ✅ Vous pouvez maintenant vous connecter. Si Supabase demande une confirmation email, vérifiez votre boîte mail."
+        "Compte créé ✅ Vérifiez votre boîte mail pour confirmer votre adresse email."
       );
     });
 
@@ -1216,11 +1329,15 @@
             <label>Changer le statut</label>
 
             <select data-dossier-id="${dossier.id}" class="statusSelect">
-              <option value="recu" ${dossier.statut === "recu" ? "selected" : ""}>Reçu</option>
-              <option value="incomplet" ${dossier.statut === "incomplet" ? "selected" : ""}>Incomplet</option>
-              <option value="verification" ${dossier.statut === "verification" ? "selected" : ""}>En vérification</option>
+              <option value="recu" ${dossier.statut === "recu" ? "selected" : ""}>Demande reçue</option>
+              <option value="documents_manquants" ${dossier.statut === "documents_manquants" || dossier.statut === "incomplet" ? "selected" : ""}>Documents manquants</option>
+              <option value="verification" ${dossier.statut === "verification" ? "selected" : ""}>Dossier en vérification</option>
+              <option value="attente_paiement" ${dossier.statut === "attente_paiement" ? "selected" : ""}>En attente de paiement</option>
+              <option value="paiement_recu" ${dossier.statut === "paiement_recu" ? "selected" : ""}>Paiement reçu</option>
               <option value="traitement_siv" ${dossier.statut === "traitement_siv" ? "selected" : ""}>En traitement SIV</option>
-              <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Terminé</option>
+              <option value="carte_grise_disponible" ${dossier.statut === "carte_grise_disponible" ? "selected" : ""}>Carte grise disponible</option>
+              <option value="termine" ${dossier.statut === "termine" ? "selected" : ""}>Dossier terminé</option>
+              <option value="refuse" ${dossier.statut === "refuse" ? "selected" : ""}>Dossier refusé</option>
             </select>
           </div>
         `
@@ -1234,7 +1351,7 @@
               Créé le ${new Date(dossier.created_at).toLocaleString("fr-FR")}
             </div>
           </div>
-          <span class="status">${dossier.statut}</span>
+          <span class="${statusClass(dossier.statut)}">${statusLabel(dossier.statut)}</span>
         </div>
 
         <div class="small-grid">
@@ -1282,6 +1399,7 @@
             alert("Erreur statut : " + error.message);
           } else {
             alert("Statut mis à jour.");
+            loadAdminDossiers();
           }
         });
       });
@@ -1299,4 +1417,3 @@
   </script>
 </body>
 </html>
-redirect
