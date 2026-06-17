@@ -1393,7 +1393,7 @@
     select.disabled = true;
 
     try {
-      const { data, error } = await client.functions.invoke("update-dossier-status", {
+      const { data, error } = await client.functions.invoke("swift-api", {
         body: {
           dossier_id: dossierId,
           new_status: newStatus
