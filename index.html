@@ -863,7 +863,10 @@
 
       const { data, error } = await client.auth.signUp({
         email: email,
-        password: password
+        password: password,
+          options: {
+           emailRedirectTo: "https://pablo38100.github.io/siv-zeroblabla/"
+        }
       });
 
       if (error) {
@@ -1296,3 +1299,4 @@
   </script>
 </body>
 </html>
+redirect
